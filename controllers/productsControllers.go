@@ -13,7 +13,23 @@ var ErrorType string
 
 func GetAllProducts(c *fiber.Ctx) error {
 	var response []model.Products
-	DB.Raw("select * from \"Products\"").Scan(&response)
+	sort := c.Query("sort")
+	status := c.Query("status")
+
+	query := "select * from \"Products\""
+
+	//update querry with the requested status
+	if status != "" {
+		query += " where status = ?"
+	}
+
+	//update querry to sort from stock
+	if sort == "asc" {
+		query += " order by quantity asc"
+	}
+
+	DB.Raw(query, status).Scan(&response)
+
 	return c.Status(fiber.StatusOK).JSON(response)
 
 }
@@ -40,7 +56,38 @@ func CreateProduct(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": "You've succesfully registered",
+		"data": "You've succesfully created the product",
 	})
 
+}
+
+func UpdateProduct(c *fiber.Ctx) error {
+	var updatedProduct model.Products
+
+	//Check if body exist
+	if err := c.BodyParser(&updatedProduct); err != nil {
+		ErrorType = "INVALID_BODY"
+		return handlers.ErrorHandler(ErrorType, c)
+	}
+	//Check if data format the same or not
+	if updatedProduct.ID == 0 || updatedProduct.Location == "" || updatedProduct.SKU == "" || updatedProduct.Status == "" {
+		ErrorType = "INVALID_BODY"
+		return handlers.ErrorHandler(ErrorType, c)
+	}
+
+	//Check if data id exist or not
+	if response := DB.Raw("Select * from \"Products\" where id = ?", updatedProduct.ID); response.Error != nil {
+		ErrorType = "NOT_FOUND"
+		return handlers.ErrorHandler(ErrorType, c)
+	}
+
+	// update the data
+	response := DB.Exec("update \"Products\" set \"sku\" = ?, \"quantity\" = ?, \"location\" = ?, \"status\" = ? where id = ?", updatedProduct.SKU, updatedProduct.Quantity, updatedProduct.Location, updatedProduct.Status, updatedProduct.ID)
+	if response.Error != nil || response.RowsAffected == 0 {
+		return handlers.ErrorHandler("Internal server error", c)
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"data": "Product succesfully updated",
+	})
 }

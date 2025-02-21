@@ -21,7 +21,7 @@ func ErrorHandler(err string, c *fiber.Ctx) error {
 		errorMessage = "Email and password required"
 	case "NOT_FOUND":
 		statusCode = fiber.StatusNotFound
-		errorMessage = "Email is not registered"
+		errorMessage = "Data not found"
 		
 	case "UNAUTHORIZED":
 		statusCode = fiber.StatusForbidden
