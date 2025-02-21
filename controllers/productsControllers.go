@@ -56,7 +56,7 @@ func CreateProduct(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": "You've succesfully created the product",
+		"message": "You've succesfully created the product",
 	})
 
 }
@@ -88,6 +88,17 @@ func UpdateProduct(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"data": "Product succesfully updated",
+		"message": "Product succesfully updated",
+	})
+}
+
+func DeleteProduct(c *fiber.Ctx) error {
+	productId := c.Params("id")
+	if err := DB.Exec("delete from \"Products\" where id = ?", productId); err.Error != nil {
+		return handlers.ErrorHandler("internal server error", c)
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "data succesfully deleted",
 	})
 }
