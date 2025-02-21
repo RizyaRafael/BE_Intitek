@@ -21,7 +21,7 @@ func GetAllProducts(c *fiber.Ctx) error {
 func CreateProduct(c *fiber.Ctx) error {
 	var newProduct model.Products
 
-	//Check if body exist or not
+	//check if client send the form data
 	if err := c.BodyParser(&newProduct); err != nil {
 		ErrorType = "INVALID_BODY"
 		return handlers.ErrorHandler(ErrorType, c)

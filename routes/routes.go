@@ -1,8 +1,17 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"BE/middleware"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 func Routes(app *fiber.App) {
-	product := app.Group("/products")
+	user := app.Group("user")
+	UsersRouter(user)
+
+	app.Use(middleware.Authorization)
+
+	product := app.Group("/product")
 	ProductsRouter(product)
 }

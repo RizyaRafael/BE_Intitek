@@ -2,6 +2,7 @@ package main
 
 import (
 	"BE/controllers"
+	"BE/middleware"
 	"BE/model"
 	"BE/routes"
 	"fmt"
@@ -36,8 +37,10 @@ func main() {
 	}
 
 	db.AutoMigrate(&model.Products{})
+	db.AutoMigrate(&model.Users{})
 	
 	controllers.DB = db
+	middleware.DB = db
 
 	app := fiber.New()
 	app.Use(cors.New())

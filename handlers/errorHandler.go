@@ -13,6 +13,19 @@ func ErrorHandler(err string, c *fiber.Ctx) error {
 	case "DATABASE_ERROR":
 		statusCode = fiber.StatusBadRequest
 		errorMessage = "Database error"
+	case "EMAIL_EXIST":
+		statusCode = fiber.StatusBadRequest
+		errorMessage = "Email already registerd"
+	case "EMAIL_AND_PASSWORD_REQ":
+		statusCode = fiber.StatusBadRequest
+		errorMessage = "Email and password required"
+	case "NOT_FOUND":
+		statusCode = fiber.StatusNotFound
+		errorMessage = "Email is not registered"
+		
+	case "UNAUTHORIZED":
+		statusCode = fiber.StatusForbidden
+		errorMessage = "Please login"
 	default:
 		statusCode = fiber.StatusInternalServerError
 		errorMessage = "an error occured"
