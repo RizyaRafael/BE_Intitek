@@ -34,8 +34,8 @@ func Register(c *fiber.Ctx) error {
 		return handlers.ErrorHandler("DATABASE_ERROR", c)
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": "You've succesfully registered",
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"message": "You've succesfully registered",
 	})
 }
 

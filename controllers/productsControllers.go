@@ -55,7 +55,7 @@ func CreateProduct(c *fiber.Ctx) error {
 		return handlers.ErrorHandler("DATABASE_ERROR", c)
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"message": "You've succesfully created the product",
 	})
 

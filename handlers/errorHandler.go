@@ -22,7 +22,9 @@ func ErrorHandler(err string, c *fiber.Ctx) error {
 	case "NOT_FOUND":
 		statusCode = fiber.StatusNotFound
 		errorMessage = "Data not found"
-		
+	case "INVALID_PASSWORD":
+		statusCode = fiber.StatusUnauthorized
+		errorMessage = "Invalid email or password"
 	case "UNAUTHORIZED":
 		statusCode = fiber.StatusForbidden
 		errorMessage = "Please login"
