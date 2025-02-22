@@ -20,7 +20,7 @@ func GetAllProducts(c *fiber.Ctx) error {
 
 	//update querry with the requested status
 	if status != "" {
-		query += " where status = ?"
+		query += " where status = " + status
 	}
 
 	//update querry to sort from stock
@@ -28,7 +28,7 @@ func GetAllProducts(c *fiber.Ctx) error {
 		query += " order by quantity asc"
 	}
 
-	DB.Raw(query, status).Scan(&response)
+	DB.Raw(query).Scan(&response)
 
 	return c.Status(fiber.StatusOK).JSON(response)
 
